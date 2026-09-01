@@ -38,16 +38,16 @@ spend and trigger it is an agent you cannot leave alone with your credit card.
 
 ## The tools
 
-| Tool | What it does |
-|---|---|
-| `list_review_options` | Board sizes available for purchase, with prices |
-| `recommend_board_size` | Reads an artifact, argues for 3, 5, or 7 — **advisory only** |
-| `submit_artifact_for_review` | Submits an artifact; returns a `review_id` |
-| `get_review_status` | Polls an in-flight review |
-| `get_review_package` | Consensus, preserved dissent, ranked recommendations |
-| `list_sample_artifacts` | Ten sample artifacts with completed reviews attached |
-| `load_sample_artifact` | Loads a sample and its review into the page |
-| `explore_dissent` | Extracts only the minority positions — what the board did *not* agree on |
+| Tool                         | What it does                                                             |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| `list_review_options`        | Board sizes available for purchase, with prices                          |
+| `recommend_board_size`       | Reads an artifact, argues for 3, 5, or 7 — **advisory only**             |
+| `submit_artifact_for_review` | Submits an artifact; returns a `review_id`                               |
+| `get_review_status`          | Polls an in-flight review                                                |
+| `get_review_package`         | Consensus, preserved dissent, ranked recommendations                     |
+| `list_sample_artifacts`      | Ten sample artifacts with completed reviews attached                     |
+| `load_sample_artifact`       | Loads a sample and its review into the page                              |
+| `explore_dissent`            | Extracts only the minority positions — what the board did _not_ agree on |
 
 `explore_dissent` exists because preserved dissent is the product. Most review
 tools average their models into a single confident answer; the disagreement is
@@ -69,11 +69,11 @@ instantly, with no wait and no account.
 They run live reviews against the real pipeline at no cost to you. Everyone else
 is charged normal rates.
 
-| Board size | Demo tokens | Price to everyone else | Typical time to complete |
-|---|---|---|---|
-| 3 reviewers | 7 | $15 | **1–3 minutes** |
-| 5 reviewers | 7 | $29 | **2–4 minutes** |
-| 7 reviewers | 7 | $69 | **3+ minutes** |
+| Board size  | Demo tokens | Price to everyone else | Typical time to complete |
+| ----------- | ----------- | ---------------------- | ------------------------ |
+| 3 reviewers | 7           | $15                    | **1–3 minutes**          |
+| 5 reviewers | 7           | $29                    | **2–4 minutes**          |
+| 7 reviewers | 7           | $69                    | **3+ minutes**           |
 
 **More reviewers takes longer.** Each reviewer is an independent model family
 producing its own findings before synthesis, so a seven-seat board is not a
