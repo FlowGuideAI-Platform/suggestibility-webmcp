@@ -1,5 +1,5 @@
 {
-  "count": 10,
+  "count": 12,
   "note": "Each sample ships with a review package produced by the real Suggestibility.ai board. Nothing here is mocked.",
   "samples": [
     {
@@ -40,7 +40,7 @@
     },
     {
       "id": "data-retention-policy",
-      "title": "Data Retention and Deletion Policy — Fernbridge Analytics, Inc.",
+      "title": "Data Retention and Deletion Policy",
       "domain": "policy",
       "panel_size": 5,
       "summary": "Fernbridge Analytics' data retention policy for accounts, logs, backups, and analytics, with a contested deletion timeline.",
@@ -49,20 +49,29 @@
     },
     {
       "id": "ml-model-card-churn",
-      "title": "Model Card: Residential Churn Propensity Model (RCPM-v4) — Solstice Broadband",
+      "title": "Model Card: Residential Churn Propensity Model (RCPM-v4)",
       "domain": "ml-model-card",
       "panel_size": 5,
       "summary": "Model card for Solstice Broadband's churn model, flagging an income-proxy feature and a churn-vs-uplift targeting dispute.",
-      "word_count": 2523,
+      "word_count": 2521,
       "has_review": false
     },
     {
       "id": "mobile-offline-sync-design",
-      "title": "Design Doc: Offline-First Sync for Fieldnote Mobile — Ridgeline Software",
+      "title": "Design Doc: Offline-First Sync for Fieldnote Mobile",
       "domain": "design-doc",
       "panel_size": 5,
       "summary": "Design doc for Fieldnote's offline mobile sync, weighing HLC field-level merges against safety-critical conflict review.",
-      "word_count": 2961,
+      "word_count": 2958,
+      "has_review": false
+    },
+    {
+      "id": "accessibility-remediation-plan",
+      "title": "Anchorline Enroll — WCAG 2.2 AA Conformance & Remediation Plan",
+      "domain": "accessibility",
+      "panel_size": 5,
+      "summary": "Benefits SaaS's phased fix plan after a failed WCAG 2.2 AA audit, with a disputed effort estimate and a legal fight over a deferred fix.",
+      "word_count": 3360,
       "has_review": false
     },
     {
@@ -90,6 +99,15 @@
       "panel_size": 7,
       "summary": "Multi-tenant B2B platform's isolation design: data separation, key management, and an authorization model with compounding long-term risk.",
       "word_count": 3440,
+      "has_review": false
+    },
+    {
+      "id": "payment-processor-migration",
+      "title": "Payment Processor Migration: Ridgeline Payments → Corvant",
+      "domain": "payments",
+      "panel_size": 7,
+      "summary": "Hollowbrook migrates 54K live subscriptions to a new payment processor, moving stored cards, PCI scope, and revenue recognition mid-flight.",
+      "word_count": 4807,
       "has_review": false
     }
   ]

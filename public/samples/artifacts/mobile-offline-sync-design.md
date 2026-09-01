@@ -3,8 +3,8 @@
 | Field | Value |
 |---|---|
 | Status | Proposed — targeting implementation in Q4 |
-| Author | Sana Okafor, Mobile Platform |
-| Reviewers | Tom Reyes (Backend), Ilse Vance (QA/Compliance), Priyank Bose (Product) |
+| Author | Staff Engineer, Mobile Platform |
+| Reviewers | Backend Lead, QA/Compliance Lead, Product Manager |
 | Related systems | `fieldnote-mobile` (iOS/Android, React Native), `fieldnote-api` (sync backend) |
 | Last updated | 2026-08-20 |
 

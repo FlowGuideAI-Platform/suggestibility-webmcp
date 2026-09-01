@@ -46,4 +46,27 @@ if grep -rInE "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" \
   fail "an email address appears in the sample artifacts above"
 fi
 
-echo "✅ leak-guard: no demo codes, credentials, or addresses found"
+# Attributed person names in sample metadata.
+#
+# The artifacts are fiction, but an invented name is not a safe one: "Priyank
+# Bose" or "Dana Whitfield" is very likely a real person somewhere, and this
+# repo is public while the documents themselves get submitted to a live review
+# pipeline. Attaching a real-looking name to a fictional failed audit or a
+# churn model with contestable features is a small harm with no upside --
+# role titles carry the same realism at zero risk.
+#
+# Deliberately narrow: only metadata fields that ATTRIBUTE a document to
+# someone, and only values shaped like "Firstname Lastname". Prose is not
+# scanned, because the false-positive rate there would make the guard noise
+# and a guard people learn to skip is worse than no guard.
+#
+# Implemented in node, not grep. The shell version of this check silently did
+# nothing: its role-word exclusion matched anywhere on the line, so
+# "| Author | Sana Okafor, Mobile Platform |" was suppressed by the "Mobile"
+# further along. The test that caught that is `npm run guard:selftest` -- a
+# guard nobody has watched fail is only a guess that it works.
+if ! node scripts/check-names.mjs; then
+  fail "a person name appears in sample metadata (see above) — use a role title"
+fi
+
+echo "✅ leak-guard: no demo codes, credentials, addresses, or person names found"

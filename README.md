@@ -45,7 +45,7 @@ spend and trigger it is an agent you cannot leave alone with your credit card.
 | `submit_artifact_for_review` | Submits an artifact; returns a `review_id`                               |
 | `get_review_status`          | Polls an in-flight review                                                |
 | `get_review_package`         | Consensus, preserved dissent, ranked recommendations                     |
-| `list_sample_artifacts`      | Ten sample artifacts with completed reviews attached                     |
+| `list_sample_artifacts`      | Twelve sample artifacts with completed reviews attached                  |
 | `load_sample_artifact`       | Loads a sample and its review into the page                              |
 | `explore_dissent`            | Extracts only the minority positions — what the board did _not_ agree on |
 
@@ -58,12 +58,17 @@ than buried in a field.
 
 ## For judges
 
-**Ten sample artifacts** ship in this repository under `public/samples/`, spanning
-different domains — architecture decisions, security policy, API design, incident
-review, and others. Each ships with a **completed review package produced by the
-real platform**. Nothing is staged, hand-written, or mocked: these are genuine
-board outputs, committed so you can read full consensus-and-dissent results
-instantly, with no wait and no account.
+**Twelve sample artifacts** ship in this repository under `public/samples/` —
+**four at each board size** — spanning architecture decisions, security
+architecture, data policy, API design, payments, accessibility, and incident
+review. Each ships with a **completed review package produced by the real
+platform**. Nothing is staged, hand-written, or mocked: these are genuine board
+outputs, committed so you can read full consensus-and-dissent results instantly,
+with no wait and no account.
+
+Four at each size is deliberate. Comparing a 3-reviewer board against a
+7-reviewer board on comparable work is the fastest way to see what the extra
+seats actually buy — and whether they were worth it.
 
 **Twenty-one demo tokens** are reserved for judging — seven at each board size.
 They run live reviews against the real pipeline at no cost to you. Everyone else

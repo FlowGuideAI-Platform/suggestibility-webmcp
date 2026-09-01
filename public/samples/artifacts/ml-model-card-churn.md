@@ -11,7 +11,7 @@
 | Model type | Gradient-boosted decision trees (XGBoost, binary classification) |
 | Training date | 2026-07-18 |
 | Owners | Retention Analytics (modeling), Data Platform (feature pipeline) |
-| Primary contact | Dana Whitfield, Sr. Data Scientist, Retention Analytics |
+| Primary contact | Sr. Data Scientist, Retention Analytics |
 | Review status | Approved for production by Model Risk Review, 2026-07-29 |
 | Retraining cadence | Quarterly, or on trigger from drift monitor (Section 9) |
 

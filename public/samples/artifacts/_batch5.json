@@ -1,7 +1,7 @@
 [
   {
     "id": "data-retention-policy",
-    "title": "Data Retention and Deletion Policy — Fernbridge Analytics, Inc.",
+    "title": "Data Retention and Deletion Policy",
     "domain": "policy",
     "panel_size": 5,
     "summary": "Fernbridge Analytics' data retention policy for accounts, logs, backups, and analytics, with a contested deletion timeline.",
@@ -9,18 +9,18 @@
   },
   {
     "id": "ml-model-card-churn",
-    "title": "Model Card: Residential Churn Propensity Model (RCPM-v4) — Solstice Broadband",
+    "title": "Model Card: Residential Churn Propensity Model (RCPM-v4)",
     "domain": "ml-model-card",
     "panel_size": 5,
     "summary": "Model card for Solstice Broadband's churn model, flagging an income-proxy feature and a churn-vs-uplift targeting dispute.",
-    "word_count": 2523
+    "word_count": 2521
   },
   {
     "id": "mobile-offline-sync-design",
-    "title": "Design Doc: Offline-First Sync for Fieldnote Mobile — Ridgeline Software",
+    "title": "Design Doc: Offline-First Sync for Fieldnote Mobile",
     "domain": "design-doc",
     "panel_size": 5,
     "summary": "Design doc for Fieldnote's offline mobile sync, weighing HLC field-level merges against safety-critical conflict review.",
-    "word_count": 2961
+    "word_count": 2958
   }
 ]

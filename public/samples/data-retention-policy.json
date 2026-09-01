@@ -1,6 +1,6 @@
 {
   "id": "data-retention-policy",
-  "title": "Data Retention and Deletion Policy — Fernbridge Analytics, Inc.",
+  "title": "Data Retention and Deletion Policy",
   "domain": "policy",
   "panel_size": 5,
   "summary": "Fernbridge Analytics' data retention policy for accounts, logs, backups, and analytics, with a contested deletion timeline.",

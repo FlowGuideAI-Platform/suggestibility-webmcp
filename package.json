@@ -15,7 +15,9 @@
     "format:check": "prettier --check .",
     "samples:build": "node scripts/build-samples.mjs",
     "guard": "bash scripts/check-no-secrets.sh",
-    "samples:run": "node scripts/run-samples.mjs"
+    "samples:run": "node scripts/run-samples.mjs",
+    "samples:check": "node scripts/check-samples.mjs",
+    "guard:selftest": "node scripts/check-names.mjs --selftest"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
