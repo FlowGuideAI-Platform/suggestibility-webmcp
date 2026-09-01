@@ -12,7 +12,8 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "samples:build": "node scripts/build-samples.mjs"
   },
   "devDependencies": {
     "prettier": "^3.3.3",

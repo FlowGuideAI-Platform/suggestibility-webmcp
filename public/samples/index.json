@@ -1,0 +1,96 @@
+{
+  "count": 10,
+  "note": "Each sample ships with a review package produced by the real Suggestibility.ai board. Nothing here is mocked.",
+  "samples": [
+    {
+      "id": "adr-session-storage",
+      "title": "ADR-0032: Web Session Storage — Redis vs. a Postgres Sessions Table",
+      "domain": "architecture",
+      "panel_size": 3,
+      "summary": "A platform team picks a Postgres sessions table over Redis for operational simplicity, trading away failure-domain isolation.",
+      "word_count": 1877,
+      "has_review": false
+    },
+    {
+      "id": "api-pagination-spec",
+      "title": "Public API Spec: Pagination for List Endpoints (v2)",
+      "domain": "api-design",
+      "panel_size": 3,
+      "summary": "A confident spec commits every future v2 list endpoint to offset-based pagination over cursor alternatives.",
+      "word_count": 1533,
+      "has_review": false
+    },
+    {
+      "id": "oncall-rotation-policy",
+      "title": "Engineering On-Call Policy",
+      "domain": "engineering-policy",
+      "panel_size": 3,
+      "summary": "A rewritten on-call policy adds secondary-on-call pay but ties missed pages directly to a manager performance conversation.",
+      "word_count": 1387,
+      "has_review": false
+    },
+    {
+      "id": "feature-flag-cleanup-runbook",
+      "title": "Runbook: Removing Stale Feature Flags",
+      "domain": "operations",
+      "panel_size": 3,
+      "summary": "A flag-cleanup runbook archives flags before code removal, assuming the call-site default still matches current live behavior.",
+      "word_count": 1778,
+      "has_review": false
+    },
+    {
+      "id": "data-retention-policy",
+      "title": "Data Retention and Deletion Policy — Fernbridge Analytics, Inc.",
+      "domain": "policy",
+      "panel_size": 5,
+      "summary": "Fernbridge Analytics' data retention policy for accounts, logs, backups, and analytics, with a contested deletion timeline.",
+      "word_count": 2968,
+      "has_review": false
+    },
+    {
+      "id": "ml-model-card-churn",
+      "title": "Model Card: Residential Churn Propensity Model (RCPM-v4) — Solstice Broadband",
+      "domain": "ml-model-card",
+      "panel_size": 5,
+      "summary": "Model card for Solstice Broadband's churn model, flagging an income-proxy feature and a churn-vs-uplift targeting dispute.",
+      "word_count": 2523,
+      "has_review": false
+    },
+    {
+      "id": "mobile-offline-sync-design",
+      "title": "Design Doc: Offline-First Sync for Fieldnote Mobile — Ridgeline Software",
+      "domain": "design-doc",
+      "panel_size": 5,
+      "summary": "Design doc for Fieldnote's offline mobile sync, weighing HLC field-level merges against safety-critical conflict review.",
+      "word_count": 2961,
+      "has_review": false
+    },
+    {
+      "id": "db-migration-plan-multiregion",
+      "title": "Migration Plan: Single-Region to Multi-Region Active-Active Postgres",
+      "domain": "infrastructure",
+      "panel_size": 7,
+      "summary": "AP platform's one-way migration from single-region Postgres to active-active, with cutover, rollback, and consistency trade-offs.",
+      "word_count": 3807,
+      "has_review": false
+    },
+    {
+      "id": "incident-postmortem-auth-outage",
+      "title": "Postmortem: Authentication Outage, 2026-06-11 (INC-2231)",
+      "domain": "reliability",
+      "panel_size": 7,
+      "summary": "Blameless postmortem for a 4-hour login outage from a key rotation, with a contested root-cause finding.",
+      "word_count": 3319,
+      "has_review": false
+    },
+    {
+      "id": "security-architecture-tenant-isolation",
+      "title": "Tenant Isolation Architecture — Cordant Workspace",
+      "domain": "security",
+      "panel_size": 7,
+      "summary": "Multi-tenant B2B platform's isolation design: data separation, key management, and an authorization model with compounding long-term risk.",
+      "word_count": 3440,
+      "has_review": false
+    }
+  ]
+}

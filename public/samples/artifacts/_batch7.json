@@ -1,0 +1,26 @@
+[
+  {
+    "id": "db-migration-plan-multiregion",
+    "title": "Migration Plan: Single-Region to Multi-Region Active-Active Postgres",
+    "domain": "infrastructure",
+    "panel_size": 7,
+    "summary": "AP platform's one-way migration from single-region Postgres to active-active, with cutover, rollback, and consistency trade-offs.",
+    "word_count": 3807
+  },
+  {
+    "id": "incident-postmortem-auth-outage",
+    "title": "Postmortem: Authentication Outage, 2026-06-11 (INC-2231)",
+    "domain": "reliability",
+    "panel_size": 7,
+    "summary": "Blameless postmortem for a 4-hour login outage from a key rotation, with a contested root-cause finding.",
+    "word_count": 3319
+  },
+  {
+    "id": "security-architecture-tenant-isolation",
+    "title": "Tenant Isolation Architecture — Cordant Workspace",
+    "domain": "security",
+    "panel_size": 7,
+    "summary": "Multi-tenant B2B platform's isolation design: data separation, key management, and an authorization model with compounding long-term risk.",
+    "word_count": 3440
+  }
+]

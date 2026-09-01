@@ -24,7 +24,8 @@
  * This split is the point of the integration, not a limitation of it.
  */
 
-const API_BASE = window.SUGGESTIBILITY_API_BASE ?? "https://api.suggestibility.ai";
+const API_BASE =
+  window.SUGGESTIBILITY_API_BASE ?? "https://api.suggestibility.ai";
 
 /** Minimum artifact length the platform accepts. Mirrors the server rule so the
  *  agent gets a useful refusal instead of a 400 it has to interpret. */
@@ -81,7 +82,9 @@ function adviseBoardSize(content, stakes) {
 
   if (chars > 12000) {
     score += 2;
-    signals.push("long artifact (>12k chars) — more surface for reviewers to disagree about");
+    signals.push(
+      "long artifact (>12k chars) — more surface for reviewers to disagree about",
+    );
   } else if (chars > 4000) {
     score += 1;
     signals.push("substantial artifact (>4k chars)");
@@ -91,7 +94,9 @@ function adviseBoardSize(content, stakes) {
 
   if (stakes === "high") {
     score += 2;
-    signals.push("caller flagged the decision as high-stakes or hard to reverse");
+    signals.push(
+      "caller flagged the decision as high-stakes or hard to reverse",
+    );
   } else if (stakes === "medium") {
     score += 1;
     signals.push("caller flagged moderate stakes");
@@ -103,7 +108,9 @@ function adviseBoardSize(content, stakes) {
     /\b(migrat|irreversible|one-way door|security|compliance|privacy|architecture decision|ADR|breaking change|data loss|production)\b/i;
   if (irreversible.test(content)) {
     score += 2;
-    signals.push("mentions irreversible, security, or compliance-sensitive work");
+    signals.push(
+      "mentions irreversible, security, or compliance-sensitive work",
+    );
   }
 
   const size = score >= 4 ? 7 : score >= 2 ? 5 : 3;
@@ -131,7 +138,8 @@ const PANEL_OPTIONS = [
     plan_key: "one_time_board",
     display_name: "Full Board Review of 7",
     price_usd: 69,
-    tagline: "A full seven-perspective board for the decisions that matter most.",
+    tagline:
+      "A full seven-perspective board for the decisions that matter most.",
   },
 ];
 
@@ -332,7 +340,10 @@ export function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
     inputSchema: {
       type: "object",
       properties: {
-        sample_id: { type: "string", description: "id from list_sample_artifacts" },
+        sample_id: {
+          type: "string",
+          description: "id from list_sample_artifacts",
+        },
       },
       required: ["sample_id"],
     },
@@ -361,7 +372,12 @@ export function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
     },
     execute: async ({ review_id }) => {
       const data = await api(`/api/reviews/${encodeURIComponent(review_id)}`);
-      const dissent = data?.synthesis?.dissent ?? data?.dissent ?? null;
+      // ReviewPackageV1: the review row wraps the package under `package`, and
+      // dissent is a first-class member of expertPanel alongside consensus —
+      // not a field on a synthesis blob. Reading the wrong path here would
+      // silently report "no dissent" on every review, which is the single most
+      // misleading thing this product could say.
+      const dissent = data?.package?.expertPanel?.dissent ?? null;
       if (!dissent || (Array.isArray(dissent) && dissent.length === 0)) {
         return {
           content: [

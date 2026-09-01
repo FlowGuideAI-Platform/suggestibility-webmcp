@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>suggestibility.ai — AI Expert Review Board, as WebMCP tools</title>
+    <meta
+      name="description"
+      content="Your agent reads an artifact, recommends a 3, 5, or 7 reviewer board, then returns consensus and preserved dissent. The agent advises; you decide."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #050817;
+        --panel: #0a1225;
+        --elevated: #101a31;
+        --border: #29334c;
+        --text: #f5f7fc;
+        --body: #c4cddf;
+        --secondary: #8d9ab3;
+        --muted: #7c8aa5;
+        --accent: #54e9fc;
+        --accent-fill: #00d2f2;
+        --accent-active: #00b4d2;
+        --consensus: #54d6c8;
+        --dissent: #f2b85b;
+        --critical: #f17878;
+        --success: #6fd39a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--body);
+        font-family: "Space Grotesk", system-ui, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      header {
+        border-bottom: 1px solid var(--border);
+        padding: 20px 0;
+      }
+      .headrow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .brand svg {
+        width: 36px;
+        height: 36px;
+        display: block;
+      }
+      .wordmark {
+        font-weight: 700;
+        font-size: 21px;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+      .wordmark .dot {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--secondary);
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border-radius: 999px;
+        padding: 7px 14px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border: 1px solid rgba(84, 233, 252, 0.28);
+        background: rgba(84, 233, 252, 0.1);
+        color: var(--accent);
+      }
+      .pill.warn {
+        border-color: rgba(242, 184, 91, 0.28);
+        background: rgba(242, 184, 91, 0.1);
+        color: var(--dissent);
+      }
+      .pill .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      h1 {
+        font-size: clamp(34px, 5.4vw, 58px);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        margin: 22px 0 0;
+        text-wrap: pretty;
+      }
+      .lede {
+        font-size: clamp(17px, 2vw, 20px);
+        max-width: 62ch;
+        margin: 18px 0 0;
+        text-wrap: pretty;
+      }
+      section {
+        padding: 64px 0;
+      }
+      h2 {
+        font-size: 27px;
+        font-weight: 600;
+        letter-spacing: -0.015em;
+        color: var(--text);
+        margin: 0 0 8px;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 26px 28px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 16px;
+        margin-top: 26px;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .card:hover,
+      .card:focus-visible {
+        border-color: var(--accent);
+        background: var(--elevated);
+        outline: none;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.35;
+      }
+      .card p {
+        margin: 0;
+        font-size: 14.5px;
+        color: var(--body);
+      }
+      .meta {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .seats {
+        color: var(--accent);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 18px;
+        font-size: 15px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 11px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      th {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--secondary);
+        font-weight: 500;
+      }
+      td strong {
+        color: var(--text);
+      }
+      .scroll {
+        overflow-x: auto;
+      }
+      .cols {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+        margin-top: 26px;
+      }
+      .col {
+        border-top: 2px solid var(--border);
+        padding-top: 14px;
+      }
+      .col.consensus {
+        border-color: var(--consensus);
+      }
+      .col.dissent {
+        border-color: var(--dissent);
+      }
+      .col.recs {
+        border-color: var(--border);
+      }
+      .col-label {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .col.consensus .col-label {
+        color: var(--consensus);
+      }
+      .col.dissent .col-label {
+        color: var(--dissent);
+      }
+      .col.recs .col-label {
+        color: var(--body);
+      }
+      .col p {
+        font-size: 15px;
+        margin: 0;
+      }
+      label {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--secondary);
+        margin-bottom: 8px;
+      }
+      input[type="text"] {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 13px 14px;
+        font-size: 16px;
+        font-family: inherit;
+        color: var(--text);
+      }
+      input[type="text"]:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      button.primary {
+        background: var(--accent-fill);
+        color: #050817;
+        border: none;
+        border-radius: 10px;
+        padding: 15px 22px;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: 44px;
+      }
+      button.primary:hover {
+        background: var(--accent);
+      }
+      button.primary:active {
+        background: var(--accent-active);
+      }
+      button.primary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+      .row > div {
+        flex: 1 1 240px;
+      }
+      code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        color: var(--accent);
+      }
+      footer {
+        border-top: 1px solid var(--elevated);
+        padding: 26px 0 40px;
+        margin-top: 40px;
+      }
+      .footrow {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 14px;
+        color: var(--secondary);
+      }
+      .footlinks {
+        display: flex;
+        gap: 20px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      a {
+        color: var(--accent);
+      }
+      .hidden {
+        display: none;
+      }
+      @media (max-width: 980px) {
+        .cols {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 620px) {
+        .wrap {
+          padding: 0 22px;
+        }
+        section {
+          padding: 44px 0;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap headrow">
+        <a class="brand" href="https://suggestibility.ai">
+          <svg viewBox="0 0 72 72" aria-hidden="true">
+            <circle cx="36" cy="12" r="6.4" fill="#9277FF" />
+            <circle cx="12" cy="52" r="6.4" fill="#9277FF" />
+            <circle cx="60" cy="52" r="6.4" fill="#F2B85B" />
+            <path
+              d="M36 18.4 L36 30"
+              stroke="#9277FF"
+              stroke-width="2.7"
+              stroke-linecap="round"
+            />
+            <path
+              d="M16.5 47.5 L28 38"
+              stroke="#9277FF"
+              stroke-width="2.7"
+              stroke-linecap="round"
+            />
+            <path
+              d="M55.5 47.5 L44 38"
+              stroke="#F2B85B"
+              stroke-width="2.7"
+              stroke-linecap="round"
+              stroke-dasharray="1 5.5"
+            />
+            <rect
+              x="26"
+              y="26"
+              width="20"
+              height="20"
+              rx="6"
+              fill="none"
+              stroke="#F5F7FC"
+              stroke-width="3"
+            />
+            <circle cx="36" cy="36" r="4.5" fill="#F5F7FC" />
+          </svg>
+          <span class="wordmark"
+            >suggestibility<span class="dot">.ai</span></span
+          >
+        </a>
+        <span id="mcp-status" class="pill warn"
+          ><span class="dot"></span>Checking for WebMCP</span
+        >
+      </div>
+    </header>
+
+    <main>
+      <section class="wrap">
+        <p class="eyebrow">AI Expert Review Board · WebMCP</p>
+        <h1>Your agent convenes the board. You decide what it costs.</h1>
+        <p class="lede">
+          This page exposes a multi-model expert review board as WebMCP tools.
+          An agent reads your artifact, argues for a 3, 5, or 7 reviewer panel,
+          and returns consensus alongside the dissent most tools average away.
+        </p>
+
+        <div class="panel" style="margin-top: 30px">
+          <p class="eyebrow">The constraint that makes this safe</p>
+          <p style="margin: 8px 0 0">
+            Panel size is resolved server-side from what was purchased. It is
+            not a parameter this page can pass. An agent can read your artifact
+            and argue hard for a seven-reviewer board — but it cannot conjure
+            reviewers nobody paid for. An agent that could both recommend spend
+            and trigger it is an agent you could not leave alone with your card.
+          </p>
+        </div>
+      </section>
+
+      <section class="wrap">
+        <h2>What the board costs</h2>
+        <p style="margin: 0">
+          More reviewers means more independent reviews, so it takes longer — a
+          seven-seat board is seven separate reviews plus a synthesis pass, not
+          one larger prompt.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Board</th>
+                <th>Price</th>
+                <th>Typical time</th>
+                <th>Best for</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>3 reviewers</strong></td>
+                <td>$15</td>
+                <td>1–3 min</td>
+                <td>A fast second opinion</td>
+              </tr>
+              <tr>
+                <td><strong>5 reviewers</strong></td>
+                <td>$29</td>
+                <td>2–4 min</td>
+                <td>Decisions that cross disciplines</td>
+              </tr>
+              <tr>
+                <td><strong>7 reviewers</strong></td>
+                <td>$69</td>
+                <td>3+ min</td>
+                <td>One-way doors and wide blast radius</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top: 16px; font-size: 15px; color: var(--secondary)">
+          Buy a single review and subscribe within 30 days, and the full amount
+          you paid becomes account credit.
+        </p>
+      </section>
+
+      <section class="wrap">
+        <h2>Sample reviews</h2>
+        <p style="margin: 0">
+          Ten artifacts spanning architecture, policy, security, and incident
+          review — each with a review package produced by the real board. Ask
+          your agent to <code>list_sample_artifacts</code>, or pick one.
+        </p>
+        <div class="grid" id="samples"></div>
+      </section>
+
+      <section class="wrap hidden" id="viewer">
+        <h2 id="viewer-title">Review package</h2>
+        <div class="cols">
+          <div class="col consensus">
+            <div class="col-label">Consensus</div>
+            <p id="v-consensus">—</p>
+          </div>
+          <div class="col dissent">
+            <div class="col-label">Preserved dissent</div>
+            <p id="v-dissent">—</p>
+          </div>
+          <div class="col recs">
+            <div class="col-label">Recommendations</div>
+            <p id="v-recs">—</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="wrap">
+        <div class="panel">
+          <h2 style="font-size: 21px">Running a live review</h2>
+          <p style="margin: 8px 0 20px">
+            Judges: enter the demo token from the submission notes to run a real
+            board at no cost. Everyone else is charged the normal rate above.
+          </p>
+          <div class="row">
+            <div>
+              <label for="token">Demo token</label>
+              <input
+                type="text"
+                id="token"
+                placeholder="SUGGJUDGE…"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <button class="primary" id="redeem">Redeem token</button>
+          </div>
+          <p
+            id="redeem-msg"
+            style="margin: 14px 0 0; font-size: 15px; color: var(--secondary)"
+          ></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap footrow">
+        <span>© 2026 suggestibility.ai</span>
+        <span class="footlinks">
+          <a href="https://suggestibility.ai/privacy">Privacy</a>
+          <a href="https://suggestibility.ai/contact">Contact</a>
+          <a
+            href="https://github.com/FlowGuideAI-Platform/suggestibility-webmcp"
+            >Source</a
+          >
+        </span>
+      </div>
+    </footer>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

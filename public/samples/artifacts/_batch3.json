@@ -1,0 +1,34 @@
+[
+  {
+    "id": "adr-session-storage",
+    "title": "ADR-0032: Web Session Storage — Redis vs. a Postgres Sessions Table",
+    "domain": "architecture",
+    "panel_size": 3,
+    "summary": "A platform team picks a Postgres sessions table over Redis for operational simplicity, trading away failure-domain isolation.",
+    "word_count": 1877
+  },
+  {
+    "id": "api-pagination-spec",
+    "title": "Public API Spec: Pagination for List Endpoints (v2)",
+    "domain": "api-design",
+    "panel_size": 3,
+    "summary": "A confident spec commits every future v2 list endpoint to offset-based pagination over cursor alternatives.",
+    "word_count": 1533
+  },
+  {
+    "id": "oncall-rotation-policy",
+    "title": "Engineering On-Call Policy",
+    "domain": "engineering-policy",
+    "panel_size": 3,
+    "summary": "A rewritten on-call policy adds secondary-on-call pay but ties missed pages directly to a manager performance conversation.",
+    "word_count": 1387
+  },
+  {
+    "id": "feature-flag-cleanup-runbook",
+    "title": "Runbook: Removing Stale Feature Flags",
+    "domain": "operations",
+    "panel_size": 3,
+    "summary": "A flag-cleanup runbook archives flags before code removal, assuming the call-site default still matches current live behavior.",
+    "word_count": 1778
+  }
+]
