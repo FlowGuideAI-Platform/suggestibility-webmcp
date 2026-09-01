@@ -1,0 +1,23 @@
+// suggestibility-webmcp — WebMCP client surface for the Suggestibility.ai
+// AI Expert Review Board.
+//
+// SAFETY: account_id is pinned to the Suggestibility account and the Worker
+// name contains "suggestibility". Both are required by the platform's
+// Cloudflare guard. Do not deploy a Worker from this repo under any other
+// name or account.
+//
+// This Worker serves static assets only. It holds NO secrets: the page calls
+// the public Suggestibility.ai API from the browser. Never add a secret
+// binding here — this repository is public.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "suggestibility-webmcp",
+  "account_id": "26795650bb12b92eeb6a3b963d2901ff",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application",
+  },
+  // Route is added at deploy time once DNS is confirmed. Kept out of source
+  // so a clone of this public repo cannot claim a suggestibility.ai hostname.
+}

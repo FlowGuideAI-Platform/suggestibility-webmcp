@@ -1,0 +1,25 @@
+suggestibility-webmcp
+Copyright 2026 All Aligned Consulting LLC
+
+This product includes software developed by All Aligned Consulting LLC
+for Suggestibility.ai (https://suggestibility.ai).
+
+Suggestibility.ai is an AI Expert Review Board: it analyses technical
+artifacts through several independent model families and returns consensus,
+preserved dissent, and prioritised recommendations.
+
+This repository contains the WebMCP client surface only. It calls the
+Suggestibility.ai platform API over HTTPS. The review pipeline itself --
+board composition, reviewer selection, synthesis, and scoring -- is a
+separate, proprietary service and is not included in this distribution.
+
+Attribution requirement (Apache License 2.0, Sections 4(a)-(d)):
+Redistributions of this work, with or without modification, must retain
+this NOTICE file, the copyright notice above, and the Apache License 2.0.
+Modified files must carry prominent notices stating that they were changed,
+including the nature of the change and the date.
+
+"Suggestibility", "Suggestibility.ai", and the Suggestibility mark are
+trademarks of All Aligned Consulting LLC. The Apache License 2.0 grants no
+trademark rights (Section 6): this licence permits use of the software, not
+use of the name or mark to endorse, promote, or identify derivative works.

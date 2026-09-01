@@ -1,0 +1,21 @@
+{
+  "name": "suggestibility-webmcp",
+  "version": "1.0.0",
+  "description": "WebMCP client surface for the Suggestibility.ai AI Expert Review Board — lets a browsing agent convene a multi-model review board over a technical artifact.",
+  "license": "Apache-2.0",
+  "private": false,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "wrangler": "^4.0.0"
+  }
+}
