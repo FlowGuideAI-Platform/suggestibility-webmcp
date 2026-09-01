@@ -25,7 +25,7 @@ fail() {
 
 # Trial/demo code prefixes. Matched loosely on purpose: a partial code or a
 # placeholder hinting at the scheme is as dangerous as the code itself.
-if grep -rInE "SUGG(JUDGE|DEMO|COMP)" \
+if grep -rInE "SUGG(JUDGE|DEMO|COMP|CAP|OP)" \
   --exclude-dir=.git --exclude-dir=node_modules \
   --exclude="check-no-secrets.sh" . 2>/dev/null; then
   fail "a demo/trial code (or a hint at one) appears above"

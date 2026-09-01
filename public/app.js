@@ -83,8 +83,12 @@ function renderPackage(title, pkg) {
   $("viewer-title").textContent = title;
 
   if (!pkg) {
+    // Say what is true and what to do about it. The first version of this
+    // rendered three empty columns and nothing else, which read as a broken
+    // page rather than as "no board has run yet" — the artifact was right
+    // there in the bundle and never shown.
     $("v-consensus").textContent =
-      "This sample has not been run through the board yet.";
+      "No board has run against this artifact yet. The document itself is above — copy or download it, or run a live review below.";
     $("v-dissent").textContent = "—";
     $("v-recs").textContent = "—";
     return;
@@ -106,12 +110,80 @@ function renderPackage(title, pkg) {
   $("viewer").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+/** The artifact currently on screen, so copy/download act on what is shown. */
+let current = null;
+
+/**
+ * Show a sample: the artifact FIRST, then whatever the board returned.
+ *
+ * The artifact is the point. Someone evaluating this needs to read what the
+ * board was asked to review before any verdict means anything — and needs to
+ * be able to take it away, paste it into the review form, or hand it to their
+ * agent. Rendering only the package left twelve samples that opened onto
+ * nothing.
+ */
+function renderSample(data) {
+  current = data;
+  $("viewer").classList.remove("hidden");
+  $("viewer-title").textContent = data.title;
+
+  $("v-meta").replaceChildren(
+    el("span", { class: "seats" }, `${data.panel_size} reviewers`),
+    el("span", {}, String(data.domain ?? "")),
+    el("span", {}, `${Number(data.word_count ?? 0).toLocaleString()} words`),
+    el(
+      "span",
+      {},
+      `${Number(data.char_count ?? 0).toLocaleString()} characters`,
+    ),
+  );
+  $("v-artifact").textContent = data.artifact ?? "";
+  $("copy-msg").textContent = "";
+  $("v-review-heading").textContent = data.review
+    ? "Review package"
+    : "Review package — not yet run";
+
+  renderPackage(data.title, data.review);
+}
+
 async function showSample(id) {
   const data = await fetch(`/samples/${encodeURIComponent(id)}.json`).then(
     (r) => r.json(),
   );
-  renderPackage(data.title, data.review);
+  renderSample(data);
   return data;
+}
+
+async function copyArtifact() {
+  if (!current) return;
+  try {
+    await navigator.clipboard.writeText(current.artifact);
+    $("copy-msg").textContent = "Copied";
+  } catch {
+    // Clipboard access is blocked in plenty of embedded browsers, which is
+    // exactly where this page is meant to run. Fall back to selecting the
+    // text so the copy is still one keystroke away rather than impossible.
+    const range = document.createRange();
+    range.selectNodeContents($("v-artifact"));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    $("copy-msg").textContent = "Selected — press Cmd/Ctrl+C";
+  }
+}
+
+function downloadArtifact() {
+  if (!current) return;
+  const blob = new Blob([current.artifact], {
+    type: "text/markdown;charset=utf-8",
+  });
+  const url = URL.createObjectURL(blob);
+  const a = el("a", { href: url, download: `${current.id}.md` });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  $("copy-msg").textContent = `Downloaded ${current.id}.md`;
 }
 
 // ---------------------------------------------------------------- token
@@ -161,7 +233,10 @@ function reportMcpStatus(ok) {
 }
 
 const registered = registerTools({
-  onArtifactLoaded: (data) => renderPackage(data.title, data.review),
+  // When the agent loads a sample, the human sees the same artifact the agent
+  // is holding — same state, one screen, no divergence between what is
+  // narrated and what is shown.
+  onArtifactLoaded: (data) => renderSample(data),
   onReviewUpdate: (data) => {
     if (data?.package) renderPackage("Live review", data.package);
   },
@@ -181,6 +256,8 @@ $("redeem").addEventListener("click", redeemToken);
 $("token").addEventListener("keydown", (e) => {
   if (e.key === "Enter") redeemToken();
 });
+$("copy-artifact").addEventListener("click", copyArtifact);
+$("download-artifact").addEventListener("click", downloadArtifact);
 
 loadSamples();
 

@@ -308,6 +308,50 @@
         outline: 2px solid var(--accent);
         outline-offset: 2px;
       }
+      button.secondary {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--body);
+        border-radius: 10px;
+        padding: 15px 22px;
+        font-family: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: 44px;
+      }
+      button.secondary:hover {
+        border-color: var(--accent);
+        color: #edeff5;
+      }
+      button.secondary:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      /* The artifact itself. Mono because it is a document under review, not
+         prose to be styled — and pre-wrap so Markdown structure survives. */
+      .doc {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px 24px;
+        max-height: 460px;
+        overflow: auto;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        color: var(--body);
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        margin: 0;
+      }
+      #v-review-heading {
+        font-size: 21px;
+        font-weight: 600;
+        color: var(--text);
+        letter-spacing: -0.015em;
+        margin: 40px 0 0;
+      }
       .row {
         display: flex;
         gap: 12px;
@@ -495,7 +539,22 @@
       </section>
 
       <section class="wrap hidden" id="viewer">
-        <h2 id="viewer-title">Review package</h2>
+        <h2 id="viewer-title">Sample artifact</h2>
+        <div class="meta" id="v-meta"></div>
+
+        <div class="row" style="margin: 18px 0 0">
+          <button class="primary" id="copy-artifact">Copy artifact</button>
+          <button class="secondary" id="download-artifact">Download .md</button>
+          <span id="copy-msg" class="eyebrow" aria-live="polite"></span>
+        </div>
+
+        <p style="margin: 18px 0 8px; font-size: 15px; color: var(--secondary)">
+          This is the document the board reviews. Copy it, or download and drop
+          it into the review form — or ask your agent to submit it for you.
+        </p>
+        <pre id="v-artifact" class="doc"></pre>
+
+        <h3 id="v-review-heading">Review package</h3>
         <div class="cols">
           <div class="col consensus">
             <div class="col-label">Consensus</div>
