@@ -10,10 +10,12 @@
   },
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy",
+    "deploy": "bash scripts/check-no-secrets.sh && wrangler deploy",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "samples:build": "node scripts/build-samples.mjs"
+    "samples:build": "node scripts/build-samples.mjs",
+    "guard": "bash scripts/check-no-secrets.sh",
+    "samples:run": "node scripts/run-samples.mjs"
   },
   "devDependencies": {
     "prettier": "^3.3.3",
