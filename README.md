@@ -91,7 +91,7 @@ one. They expire after the judging period.
 Requires Node 22+.
 
 ```bash
-git clone https://github.com/<owner>/suggestibility-webmcp.git
+git clone https://github.com/FlowGuideAI-Platform/suggestibility-webmcp.git
 cd suggestibility-webmcp
 npm install
 npm run dev
