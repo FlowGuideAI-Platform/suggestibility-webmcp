@@ -34,7 +34,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const samplesDir = join(root, "public", "samples");
-const API = process.env.SUGG_API ?? "https://api.suggestibility.ai";
+const API = process.env.SUGG_API ?? "https://my.suggestibility.ai";
 const TOKEN = process.env.SUGG_SESSION;
 
 const args = process.argv.slice(2);

@@ -15,7 +15,7 @@
 import { registerTools, setSessionToken } from "/webmcp-tools.js";
 
 const API_BASE =
-  window.SUGGESTIBILITY_API_BASE ?? "https://api.suggestibility.ai";
+  window.SUGGESTIBILITY_API_BASE ?? "https://my.suggestibility.ai";
 
 const $ = (id) => document.getElementById(id);
 

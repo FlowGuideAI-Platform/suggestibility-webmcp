@@ -25,7 +25,7 @@
  */
 
 const API_BASE =
-  window.SUGGESTIBILITY_API_BASE ?? "https://api.suggestibility.ai";
+  window.SUGGESTIBILITY_API_BASE ?? "https://my.suggestibility.ai";
 
 /** Minimum artifact length the platform accepts. Mirrors the server rule so the
  *  agent gets a useful refusal instead of a 400 it has to interpret. */
