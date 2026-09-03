@@ -81,14 +81,14 @@ account. Everyone else is charged the normal rate.
 
 | Board size  | Price to everyone else | Typical time to complete |
 | ----------- | ---------------------- | ------------------------ |
-| 3 reviewers | $15                    | **1–3 minutes**          |
-| 5 reviewers | $29                    | **2–4 minutes**          |
-| 7 reviewers | $69                    | **3+ minutes**           |
+| 3 reviewers | $15                    | **45–90 seconds**        |
+| 5 reviewers | $29                    | **1–3 minutes**          |
+| 7 reviewers | $69                    | **2–4 minutes**          |
 
 **More reviewers takes longer.** Each reviewer is an independent model family
 producing its own findings before synthesis, so a seven-seat board is not a
 seven-times-larger prompt — it is seven separate reviews plus a synthesis pass.
-Start with a 3-reviewer sample if you want a result in about ninety seconds.
+Start with a 3-reviewer sample if you want a result in about a minute.
 
 Board size comes from the credit being spent, not from the sample's label. A
 sample catalogued as "3 reviewers" run on a 7-reviewer entitlement convenes

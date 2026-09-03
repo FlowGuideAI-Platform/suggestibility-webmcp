@@ -11,7 +11,7 @@ demo. Capture a single 7-reviewer board first:
 SUGG_SESSION=<sug_session cookie value> npm run samples:run -- --panel 7
 ```
 
-Let one finish (3+ minutes), then `npm run samples:build` and redeploy. You
+Let one finish (2-4 minutes), then `npm run samples:build` and redeploy. You
 only strictly need `payment-processor-migration` for this script.
 
 **Record in ChatGPT's in-app browser.** A human cannot submit a review from
