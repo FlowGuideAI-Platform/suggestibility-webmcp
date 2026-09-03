@@ -113,6 +113,9 @@ function renderPackage(title, pkg) {
 /** The artifact currently on screen, so copy/download act on what is shown. */
 let current = null;
 
+/** Judge session token, if this page was opened with one. Memory only. */
+let judgeSession = null;
+
 /**
  * Show a sample: the artifact FIRST, then whatever the board returned.
  *
@@ -199,7 +202,13 @@ async function redeemToken() {
   try {
     const res = await fetch(`${API_BASE}/api/trials/redeem`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        // Carry the judge session when there is one. Without this the redeem
+        // call is the single request on the page that ignores it, and a judge
+        // arriving by pre-authenticated link would be told to sign in.
+        ...(judgeSession ? { authorization: `Bearer ${judgeSession}` } : {}),
+      },
       credentials: "include",
       body: JSON.stringify({ code }),
     });
@@ -266,11 +275,35 @@ registered.then(reportMcpStatus).catch((e) => {
 // A token in the URL lets a judge land on a working page from the submission
 // notes without typing anything. Stripped from the address bar immediately so
 // it does not survive in history or get shared in a screenshot.
-const urlToken = new URL(location.href).searchParams.get("token");
-if (urlToken) {
-  $("token").value = urlToken;
-  history.replaceState({}, "", location.pathname);
+const params = new URL(location.href).searchParams;
+const urlToken = params.get("token");
+if (urlToken) $("token").value = urlToken;
+
+/**
+ * Pre-authenticated judge access.
+ *
+ * Sign-in here is passwordless — a code emailed to an inbox. That works for a
+ * customer and not at all for a reviewer who has no mailbox on this account,
+ * so a shared password was never an option. A scoped session token is:
+ * judges follow one link and are already signed in.
+ *
+ * Held in memory only and never written to storage, and the URL is rewritten
+ * immediately so the credential does not survive in history, a screenshot, or
+ * a shared tab. It authorises exactly one account holding demo credits, it
+ * expires on its own at the end of judging, and deleting one database row
+ * revokes it instantly.
+ */
+const urlSession = params.get("session");
+if (urlSession) {
+  judgeSession = urlSession;
+  setSessionToken(urlSession);
+  const badge = $("redeem-msg");
+  if (badge)
+    badge.textContent =
+      "Signed in with the judge session — you can run a live review below.";
 }
+
+if (urlToken || urlSession) history.replaceState({}, "", location.pathname);
 
 $("redeem").addEventListener("click", redeemToken);
 $("token").addEventListener("keydown", (e) => {
