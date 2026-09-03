@@ -22,7 +22,7 @@ The result is a public, Apache-2.0 WebMCP client. It holds no secrets and no rev
 
 `explore_dissent` exists because preserved dissent is the product's actual differentiator — most review tooling averages disagreement into a single confident answer, and this platform doesn't, so pulling out only the minority positions deserved a first-class tool rather than a field buried in a larger response.
 
-Twelve sample artifacts ship with the client, four at each board size, 33,760 words total, spanning architecture decisions, security architecture, data policy, API design, payments, accessibility, and incident review. Each carries a review package produced by the real platform, so a board can be read in full — consensus and dissent both — with no account and no wait.
+Twelve sample artifacts ship with the client, four at each board size, 23,082 words total, spanning architecture decisions, security architecture, data policy, API design, payments, accessibility, and incident review. Each carries a review package produced by the real platform, so a board can be read in full — consensus and dissent both — with no account and no wait.
 
 The human page and the agent tool surface render from the same state. What a person sees on screen is what the agent just did. A demo where the agent narrates one thing while the page shows another is worse than no demo.
 

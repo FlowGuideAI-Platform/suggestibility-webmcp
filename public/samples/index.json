@@ -44,7 +44,7 @@
       "domain": "policy",
       "panel_size": 5,
       "summary": "Fernbridge Analytics' data retention policy for accounts, logs, backups, and analytics, with a contested deletion timeline.",
-      "word_count": 2968,
+      "word_count": 2168,
       "has_review": false
     },
     {
@@ -53,7 +53,7 @@
       "domain": "ml-model-card",
       "panel_size": 5,
       "summary": "Model card for Solstice Broadband's churn model, flagging an income-proxy feature and a churn-vs-uplift targeting dispute.",
-      "word_count": 2521,
+      "word_count": 2042,
       "has_review": false
     },
     {
@@ -62,7 +62,7 @@
       "domain": "design-doc",
       "panel_size": 5,
       "summary": "Design doc for Fieldnote's offline mobile sync, weighing HLC field-level merges against safety-critical conflict review.",
-      "word_count": 2958,
+      "word_count": 2031,
       "has_review": false
     },
     {
@@ -71,7 +71,7 @@
       "domain": "accessibility",
       "panel_size": 5,
       "summary": "Benefits SaaS's phased fix plan after a failed WCAG 2.2 AA audit, with a disputed effort estimate and a legal fight over a deferred fix.",
-      "word_count": 3360,
+      "word_count": 2176,
       "has_review": false
     },
     {
@@ -80,7 +80,7 @@
       "domain": "infrastructure",
       "panel_size": 7,
       "summary": "AP platform's one-way migration from single-region Postgres to active-active, with cutover, rollback, and consistency trade-offs.",
-      "word_count": 3807,
+      "word_count": 2006,
       "has_review": false
     },
     {
@@ -89,7 +89,7 @@
       "domain": "reliability",
       "panel_size": 7,
       "summary": "Blameless postmortem for a 4-hour login outage from a key rotation, with a contested root-cause finding.",
-      "word_count": 3319,
+      "word_count": 2267,
       "has_review": false
     },
     {
@@ -98,7 +98,7 @@
       "domain": "security",
       "panel_size": 7,
       "summary": "Multi-tenant B2B platform's isolation design: data separation, key management, and an authorization model with compounding long-term risk.",
-      "word_count": 3440,
+      "word_count": 1898,
       "has_review": false
     },
     {
@@ -107,7 +107,7 @@
       "domain": "payments",
       "panel_size": 7,
       "summary": "Hollowbrook migrates 54K live subscriptions to a new payment processor, moving stored cards, PCI scope, and revenue recognition mid-flight.",
-      "word_count": 4807,
+      "word_count": 1919,
       "has_review": false
     }
   ]
