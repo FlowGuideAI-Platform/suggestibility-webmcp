@@ -221,15 +221,31 @@ async function redeemToken() {
 
 // ---------------------------------------------------------------- WebMCP
 
-function reportMcpStatus(ok) {
+/**
+ * Report what actually happened, not what was attempted.
+ *
+ * Three distinct states, because they need three different responses from
+ * whoever is looking: the browser has no WebMCP (enable the flag, or use an
+ * agent browser), registration threw (a bug worth reporting), or the tools are
+ * genuinely live. Collapsing the middle case into either neighbour is how a
+ * broken integration gets demoed as a working one.
+ */
+function reportMcpStatus(status) {
   const el_ = $("mcp-status");
+  const ok = status?.ok === true;
   el_.className = ok ? "pill" : "pill warn";
+  const label = ok
+    ? `${status.count} WebMCP tools registered`
+    : status?.reason === "error"
+      ? `WebMCP registration failed (${status.failed})`
+      : "No WebMCP — open in an agent browser";
   el_.replaceChildren(
     el("span", { class: "dot" }),
-    document.createTextNode(
-      ok ? "WebMCP tools registered" : "No WebMCP — open in an agent browser",
-    ),
+    document.createTextNode(label),
   );
+  el_.title = ok
+    ? "This page exposed its tools to the browsing agent."
+    : "Chrome 149+: enable chrome://flags/#enable-webmcp-testing, or open in ChatGPT's in-app browser.";
 }
 
 const registered = registerTools({
@@ -241,7 +257,11 @@ const registered = registerTools({
     if (data?.package) renderPackage("Live review", data.package);
   },
 });
-reportMcpStatus(registered);
+// registerTools is async now — the status must reflect settled registrations.
+registered.then(reportMcpStatus).catch((e) => {
+  console.error("[suggestibility] WebMCP registration threw", e);
+  reportMcpStatus({ ok: false, reason: "error", failed: "?" });
+});
 
 // A token in the URL lets a judge land on a working page from the submission
 // notes without typing anything. Stripped from the address bar immediately so

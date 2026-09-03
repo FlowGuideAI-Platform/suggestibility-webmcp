@@ -149,13 +149,31 @@ const PANEL_OPTIONS = [
  * Guarded because the page must still work for a human in a browser with no
  * WebMCP support — the agent surface is additive, never load-bearing for the UI.
  */
-export function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
+export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
+  // Per the WebMCP IDL the entry point is document.modelContext, not
+  // navigator.modelContext. In Chrome it exists only behind
+  // chrome://flags/#enable-webmcp-testing (Chrome 149+), so its absence in a
+  // normal browser is the ordinary case, not a fault.
   if (!("modelContext" in document)) {
-    console.info("[suggestibility] WebMCP unavailable — human UI only.");
-    return false;
+    console.info(
+      "[suggestibility] WebMCP unavailable — human UI only. In Chrome 149+, enable chrome://flags/#enable-webmcp-testing.",
+    );
+    return { ok: false, reason: "unsupported", count: 0 };
   }
 
-  const register = (tool) => document.modelContext.registerTool(tool);
+  // registerTool returns a Promise. Firing eight and reporting success
+  // synchronously would make the status indicator a claim rather than an
+  // observation, and a rejected registration would surface only as an
+  // unhandled rejection in a console nobody reads during judging.
+  const pending = [];
+  const register = (tool) => {
+    try {
+      const p = document.modelContext.registerTool(tool);
+      if (p && typeof p.then === "function") pending.push(p);
+    } catch (e) {
+      pending.push(Promise.reject(e));
+    }
+  };
 
   register({
     name: "list_review_options",
@@ -394,6 +412,17 @@ export function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
     },
   });
 
-  console.info("[suggestibility] WebMCP tools registered.");
-  return true;
+  const results = await Promise.allSettled(pending);
+  const failed = results.filter((r) => r.status === "rejected");
+  const count = results.length - failed.length;
+
+  if (failed.length) {
+    console.error(
+      `[suggestibility] ${failed.length} of ${results.length} WebMCP tools failed to register:`,
+      failed.map((f) => String(f.reason)),
+    );
+    return { ok: false, reason: "error", count, failed: failed.length };
+  }
+  console.info(`[suggestibility] ${count} WebMCP tools registered.`);
+  return { ok: true, reason: "registered", count };
 }
