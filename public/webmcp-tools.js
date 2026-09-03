@@ -62,6 +62,24 @@ export async function api(path, options = {}) {
     throw new Error(`API returned a non-JSON response (HTTP ${res.status})`);
   }
   if (!res.ok) {
+    // An agent cannot act on "sign in required" — this page has no sign-in of
+    // its own, and redeeming a token needs auth too, so an unauthenticated
+    // agent has no way out from inside the conversation. Say what would fix
+    // it instead, in terms the agent can relay to the person reading.
+    if (res.status === 401) {
+      throw new Error(
+        "Not signed in. This page must be opened with the pre-authenticated link " +
+          "from the submission notes (app.suggestibility.ai/?session=...), which " +
+          "carries review credits. Sample artifacts and board-size recommendations " +
+          "work without it; submitting a review does not.",
+      );
+    }
+    if (res.status === 402) {
+      throw new Error(
+        "No review credits remain on this account. Sample artifacts and " +
+          "recommendations are still available without credits.",
+      );
+    }
     throw new Error(data.error ?? `request failed (HTTP ${res.status})`);
   }
   return data;
