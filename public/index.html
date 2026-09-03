@@ -543,14 +543,27 @@
         <div class="meta" id="v-meta"></div>
 
         <div class="row" style="margin: 18px 0 0">
-          <button class="primary" id="copy-artifact">Copy artifact</button>
+          <button class="primary" id="run-review">Run this review</button>
+          <button class="secondary" id="copy-artifact">Copy artifact</button>
           <button class="secondary" id="download-artifact">Download .md</button>
-          <span id="copy-msg" class="eyebrow" aria-live="polite"></span>
         </div>
+        <p
+          id="copy-msg"
+          class="eyebrow"
+          aria-live="polite"
+          style="
+            margin: 12px 0 0;
+            min-height: 1.3em;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            font-size: 13px;
+          "
+        ></p>
 
         <p style="margin: 18px 0 8px; font-size: 15px; color: var(--secondary)">
-          This is the document the board reviews. Copy it, or download and drop
-          it into the review form — or ask your agent to submit it for you.
+          This is the document the board reviews. Run it here, take it with you,
+          or ask your agent to submit it for you — the agent uses the same tools
+          this page does.
         </p>
         <pre id="v-artifact" class="doc"></pre>
 

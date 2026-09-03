@@ -41,7 +41,7 @@ export function setSessionToken(token) {
   sessionToken = token;
 }
 
-async function api(path, options = {}) {
+export async function api(path, options = {}) {
   const headers = { ...(options.headers ?? {}) };
   if (options.body) headers["content-type"] = "application/json";
   if (sessionToken) headers["authorization"] = `Bearer ${sessionToken}`;

@@ -12,7 +12,7 @@
  * exact surface that later gets pointed at an API response, and a manual
  * escape helper only holds until someone adds one interpolation that skips it.
  */
-import { registerTools, setSessionToken } from "/webmcp-tools.js";
+import { registerTools, setSessionToken, api } from "/webmcp-tools.js";
 
 const API_BASE =
   window.SUGGESTIBILITY_API_BASE ?? "https://my.suggestibility.ai";
@@ -175,6 +175,82 @@ async function copyArtifact() {
   }
 }
 
+/**
+ * Run the loaded artifact through a real board, from this page.
+ *
+ * Copy and download existed before this did, which left a dead end: they imply
+ * somewhere to paste, and there was nowhere — the only submit path was the
+ * agent tools. Someone without an agent browser could read the samples and go
+ * no further.
+ *
+ * The artifact is already loaded, so asking anyone to copy it, navigate to
+ * another host, and paste it back was never the right shape. Board size still
+ * comes from the credit being spent; this button cannot choose it.
+ */
+async function runReview() {
+  if (!current) return;
+  const btn = $("run-review");
+  const msg = $("copy-msg");
+  btn.disabled = true;
+
+  const started = Date.now();
+  const elapsed = () => Math.round((Date.now() - started) / 1000);
+  let ticker = null;
+
+  try {
+    msg.textContent = "Submitting to the board…";
+    const submitted = await api("/api/reviews", {
+      method: "POST",
+      body: JSON.stringify({
+        title: current.title,
+        content: current.artifact,
+        type: current.domain,
+      }),
+    });
+
+    // A seven-seat board is seven independent reviews plus a synthesis pass.
+    // Minutes of an unchanging screen reads as a hang, so the elapsed counter
+    // is the difference between "working" and "broken" to someone watching.
+    ticker = setInterval(() => {
+      msg.textContent = `Board convening — ${elapsed()}s elapsed. A 7-reviewer board takes 3+ minutes.`;
+    }, 1000);
+
+    for (let i = 0; i < 90; i++) {
+      await new Promise((r) => setTimeout(r, 4000));
+      const got = await api(
+        `/api/reviews/${encodeURIComponent(submitted.review_id)}`,
+      );
+      if (["complete", "degraded"].includes(got.status)) {
+        clearInterval(ticker);
+        const seats = got.package?.expertPanel?.experts?.length ?? "?";
+        msg.textContent = `Board of ${seats} returned in ${elapsed()}s.`;
+        $("v-review-heading").textContent = "Review package — live run";
+        renderPackage(current.title, got.package);
+        return;
+      }
+      if (got.status === "failed") {
+        clearInterval(ticker);
+        msg.textContent =
+          "That review failed. The credit is returned automatically.";
+        return;
+      }
+    }
+    clearInterval(ticker);
+    msg.textContent = "Still running — check back shortly.";
+  } catch (e) {
+    if (ticker) clearInterval(ticker);
+    const text = String(e?.message ?? e);
+    // The two failures worth naming precisely, because the fix differs.
+    msg.textContent = /sign in/i.test(text)
+      ? "Open the judge link from the submission notes, or sign in and redeem a token below."
+      : /credit/i.test(text)
+        ? "No review credits left on this account. Redeem a token below."
+        : `Could not run the review: ${text}`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 function downloadArtifact() {
   if (!current) return;
   const blob = new Blob([current.artifact], {
@@ -309,6 +385,7 @@ $("redeem").addEventListener("click", redeemToken);
 $("token").addEventListener("keydown", (e) => {
   if (e.key === "Enter") redeemToken();
 });
+$("run-review").addEventListener("click", runReview);
 $("copy-artifact").addEventListener("click", copyArtifact);
 $("download-artifact").addEventListener("click", downloadArtifact);
 
