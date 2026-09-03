@@ -47,7 +47,7 @@ for (const entry of samples) {
   // missing one: the page would confidently show a 3-reviewer board under a
   // heading promising 7. run-samples.mjs refuses to write these, so finding
   // one here means a bundle was edited by hand.
-  const seats = bundle.review?.expertPanel?.experts?.length ?? 0;
+  const seats = bundle.review?.panel?.size ?? 0;
   if (seats !== entry.panel_size) {
     mismatched.push(
       `${entry.id}: catalogue says ${entry.panel_size}, package has ${seats}`,

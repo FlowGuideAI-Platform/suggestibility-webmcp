@@ -263,6 +263,50 @@
         font-size: 15px;
         margin: 0;
       }
+      .col > div {
+        font-size: 15px;
+      }
+      .item {
+        margin: 0 0 16px;
+      }
+      .item:last-child {
+        margin-bottom: 0;
+      }
+      .item .who {
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 5px;
+      }
+      /* The majority position a dissenter is arguing against. Shown because a
+         minority view without the view it opposes is just an opinion. */
+      .item .against {
+        display: block;
+        font-size: 13.5px;
+        color: var(--secondary);
+        border-left: 2px solid var(--border);
+        padding-left: 10px;
+        margin-top: 7px;
+      }
+      .prio {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-right: 7px;
+      }
+      .scorebar {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 18px 0 0;
+      }
       label {
         display: block;
         font-family: "JetBrains Mono", monospace;
@@ -571,15 +615,16 @@
         <div class="cols">
           <div class="col consensus">
             <div class="col-label">Consensus</div>
-            <p id="v-consensus">—</p>
+            <div id="v-consensus">—</div>
           </div>
+          <p class="scorebar" id="score-bar"></p>
           <div class="col dissent">
             <div class="col-label">Preserved dissent</div>
-            <p id="v-dissent">—</p>
+            <div id="v-dissent">—</div>
           </div>
           <div class="col recs">
             <div class="col-label">Recommendations</div>
-            <p id="v-recs">—</p>
+            <div id="v-recs">—</div>
           </div>
         </div>
       </section>

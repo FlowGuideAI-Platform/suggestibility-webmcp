@@ -69,43 +69,107 @@ async function loadSamples() {
   }
 }
 
-/** Pull the first line of text out of a package section, whatever its shape. */
-function firstText(items, keys) {
-  if (!Array.isArray(items) || items.length === 0) return null;
-  const item = items[0];
-  if (typeof item === "string") return item;
-  for (const k of keys) if (typeof item?.[k] === "string") return item[k];
-  return null;
-}
-
+/**
+ * Render a review package.
+ *
+ * These field names were read off a stored package, not inferred from the
+ * TypeScript types — those describe a different shape (camelCase, expertPanel)
+ * from what the pipeline actually writes. Reading the wrong paths produced
+ * "No consensus recorded" on a board that had just returned five findings and
+ * two dissenting positions.
+ *
+ *   pkg.panel.size                            board size actually convened
+ *   pkg.synthesis.structured.consensus        string
+ *   pkg.synthesis.structured.dissent          [{position, held_by, majority_view}]
+ *   pkg.synthesis.structured.recommendations  [{priority, body}]
+ *   pkg.synthesis.structured.findings         [{title, severity, body, raised_by}]
+ *   pkg.score                                 {overall, confidence}
+ */
 function renderPackage(title, pkg) {
   $("viewer").classList.remove("hidden");
   $("viewer-title").textContent = title;
 
+  const setText = (id, text) => $(id).replaceChildren(el("p", {}, text));
+  const bar = $("score-bar");
+
   if (!pkg) {
-    // Say what is true and what to do about it. The first version of this
-    // rendered three empty columns and nothing else, which read as a broken
-    // page rather than as "no board has run yet" — the artifact was right
-    // there in the bundle and never shown.
-    $("v-consensus").textContent =
-      "No board has run against this artifact yet. The document itself is above — copy or download it, or run a live review below.";
-    $("v-dissent").textContent = "—";
-    $("v-recs").textContent = "—";
+    // Say what is true and what to do about it. The first version rendered
+    // three empty columns, which read as a broken page rather than as "no
+    // board has run yet".
+    setText(
+      "v-consensus",
+      "No board has run against this artifact yet. The document is above — run it here, or take it with you.",
+    );
+    setText("v-dissent", "—");
+    setText("v-recs", "—");
+    if (bar) bar.textContent = "";
     return;
   }
 
-  const panel = pkg.expertPanel ?? {};
-  $("v-consensus").textContent =
-    firstText(panel.consensus, ["statement", "text", "summary", "position"]) ??
-    "No consensus recorded.";
-  // "No dissent" is a real finding, not an empty state — the board converging
-  // is information, and blanking the column would hide it.
-  $("v-dissent").textContent =
-    firstText(panel.dissent, ["position", "statement", "text", "summary"]) ??
-    "The board recorded no dissent — the reviewers converged.";
-  $("v-recs").textContent =
-    firstText(pkg.recommendations, ["text", "title", "summary", "action"]) ??
-    "No recommendations recorded.";
+  const s = pkg.synthesis?.structured ?? {};
+
+  setText(
+    "v-consensus",
+    typeof s.consensus === "string" && s.consensus.trim()
+      ? s.consensus
+      : "No consensus recorded.",
+  );
+
+  // Dissent carries who held it and what they argued against. A minority
+  // position without the majority view it opposes is just an opinion, and
+  // showing both is the whole reason this product preserves dissent.
+  const dissent = Array.isArray(s.dissent) ? s.dissent : [];
+  if (dissent.length) {
+    $("v-dissent").replaceChildren(
+      ...dissent.map((d) =>
+        el(
+          "div",
+          { class: "item" },
+          el("span", {}, String(d.position ?? "")),
+          d.held_by ? el("span", { class: "who" }, String(d.held_by)) : null,
+          d.majority_view
+            ? el(
+                "span",
+                { class: "against" },
+                "Majority: " + String(d.majority_view),
+              )
+            : null,
+        ),
+      ),
+    );
+  } else {
+    // Convergence is a finding, not an empty state.
+    setText(
+      "v-dissent",
+      "The board recorded no dissent — the reviewers converged.",
+    );
+  }
+
+  const recs = Array.isArray(s.recommendations) ? s.recommendations : [];
+  if (recs.length) {
+    $("v-recs").replaceChildren(
+      ...recs.map((r) =>
+        el(
+          "div",
+          { class: "item" },
+          r.priority ? el("span", { class: "prio" }, String(r.priority)) : null,
+          el("span", {}, String(r.body ?? r.text ?? "")),
+        ),
+      ),
+    );
+  } else {
+    setText("v-recs", "No recommendations recorded.");
+  }
+
+  if (bar) {
+    const bits = [];
+    if (pkg.panel?.size) bits.push(pkg.panel.size + " reviewers convened");
+    if (Array.isArray(s.findings)) bits.push(s.findings.length + " findings");
+    if (dissent.length) bits.push(dissent.length + " dissenting");
+    if (typeof pkg.score?.overall === "number")
+      bits.push("score " + pkg.score.overall);
+    bar.textContent = bits.join(" · ");
+  }
 
   $("viewer").scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -222,7 +286,7 @@ async function runReview() {
       );
       if (["complete", "degraded"].includes(got.status)) {
         clearInterval(ticker);
-        const seats = got.package?.expertPanel?.experts?.length ?? "?";
+        const seats = got.package?.panel?.size ?? "?";
         msg.textContent = `Board of ${seats} returned in ${elapsed()}s.`;
         $("v-review-heading").textContent = "Review package — live run";
         renderPackage(current.title, got.package);

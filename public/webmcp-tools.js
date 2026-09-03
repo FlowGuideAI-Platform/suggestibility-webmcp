@@ -403,7 +403,7 @@ export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
       // not a field on a synthesis blob. Reading the wrong path here would
       // silently report "no dissent" on every review, which is the single most
       // misleading thing this product could say.
-      const dissent = data?.package?.expertPanel?.dissent ?? null;
+      const dissent = data?.package?.synthesis?.structured?.dissent ?? null;
       if (!dissent || (Array.isArray(dissent) && dissent.length === 0)) {
         return {
           content: [

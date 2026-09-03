@@ -134,7 +134,7 @@ for (const entry of targets) {
   // Assert, do not assume. See the header: a mismatch here means the operator
   // was holding the wrong tier, and saving it would publish a package that
   // contradicts the catalogue entry pointing at it.
-  const seats = pkg.expertPanel?.experts?.length ?? 0;
+  const seats = pkg.panel?.size ?? 0;
   if (seats !== PANEL) {
     console.log(
       `MISMATCH — got ${seats} reviewers, expected ${PANEL}. Not saved. ` +
