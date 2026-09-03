@@ -165,8 +165,16 @@ export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
   // synchronously would make the status indicator a claim rather than an
   // observation, and a rejected registration would surface only as an
   // unhandled rejection in a console nobody reads during judging.
+  // `attempted` is tracked separately from `pending` on purpose. The IDL says
+  // registerTool returns a Promise, but an implementation that returns
+  // undefined is entirely possible — and then a promise-only counter reports
+  // "0 tools registered" for eight tools that registered perfectly well.
+  // Counting attempts and subtracting real failures is right under both
+  // behaviours.
+  let attempted = 0;
   const pending = [];
   const register = (tool) => {
+    attempted++;
     try {
       const p = document.modelContext.registerTool(tool);
       if (p && typeof p.then === "function") pending.push(p);
@@ -414,7 +422,7 @@ export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
 
   const results = await Promise.allSettled(pending);
   const failed = results.filter((r) => r.status === "rejected");
-  const count = results.length - failed.length;
+  const count = attempted - failed.length;
 
   if (failed.length) {
     console.error(
