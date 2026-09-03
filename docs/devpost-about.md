@@ -22,7 +22,7 @@ The result is a public, Apache-2.0 WebMCP client. It holds no secrets and no rev
 
 `explore_dissent` exists because preserved dissent is the product's actual differentiator — most review tooling averages disagreement into a single confident answer, and this platform doesn't, so pulling out only the minority positions deserved a first-class tool rather than a field buried in a larger response.
 
-Twelve sample artifacts ship with the client, four at each board size, 23,082 words total, spanning architecture decisions, security architecture, data policy, API design, payments, accessibility, and incident review. Each carries a review package produced by the real platform, so a board can be read in full — consensus and dissent both — with no account and no wait.
+Twelve sample artifacts ship with the client, four at each board size, 23,082 words total, spanning architecture decisions, security architecture, data policy, API design, payments, accessibility, and incident review. They ship as artifacts rather than as pre-computed results: reviews run live against the production pipeline, on demand, from the page or from an agent. A canned review output is indistinguishable from a convincing fake, so there are none in the repository.
 
 The human page and the agent tool surface render from the same state. What a person sees on screen is what the agent just did. A demo where the agent narrates one thing while the page shows another is worse than no demo.
 
@@ -34,7 +34,7 @@ Cookies were the other authentication fight. The session cookie is httpOnly, Sam
 
 Latency turned out to be a design constraint, not an implementation detail. A seven-seat board is seven independent reviews plus a synthesis pass, not one larger prompt — so it takes minutes, not seconds. That is why the sample artifacts ship with their review packages already captured: exploring a board has to be instant even though generating one is not.
 
-And honesty had to be made mechanical, not promised. The README states that every sample carries a genuine platform review, nothing staged. A release check enforces that directly: the build fails if any sample is missing a real review package, or if a package's reviewer count contradicts what the catalog advertises for that board size.
+And honesty had to be made mechanical, not promised. An early draft of the README claimed every sample shipped with a completed board review. It did not — the samples were written, the boards had not been run, and the sentence would have gone public unchallenged. A release check now fails the build if a stored package's reviewer count contradicts what the catalogue advertises, and the claim itself was rewritten to describe what the repository actually contains.
 
 ## Accomplishments that we're proud of
 

@@ -349,7 +349,7 @@ export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
   register({
     name: "list_sample_artifacts",
     description:
-      "List pre-loaded sample artifacts spanning different domains, each with a completed review already attached. Use these to explore what the board produces without submitting anything.",
+      "List the sample artifacts bundled with this page, spanning different domains and board sizes. These are documents to review, not pre-computed results &mdash; submit one to see what the board produces.",
     inputSchema: { type: "object", properties: {} },
     execute: async () => {
       const data = await fetch("/samples/index.json").then((r) => r.json());
@@ -362,7 +362,7 @@ export async function registerTools({ onArtifactLoaded, onReviewUpdate } = {}) {
   register({
     name: "load_sample_artifact",
     description:
-      "Load a sample artifact and its completed review package by id. Renders it into the page for the human to read alongside you.",
+      "Load a sample artifact by id, plus any review already run against it in this session. Renders it into the page so the human reads what you are holding.",
     inputSchema: {
       type: "object",
       properties: {

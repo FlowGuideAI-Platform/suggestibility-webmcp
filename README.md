@@ -45,8 +45,8 @@ spend and trigger it is an agent you cannot leave alone with your credit card.
 | `submit_artifact_for_review` | Submits an artifact; returns a `review_id`                               |
 | `get_review_status`          | Polls an in-flight review                                                |
 | `get_review_package`         | Consensus, preserved dissent, ranked recommendations                     |
-| `list_sample_artifacts`      | Twelve sample artifacts with completed reviews attached                  |
-| `load_sample_artifact`       | Loads a sample and its review into the page                              |
+| `list_sample_artifacts`      | Twelve sample artifacts spanning domains and board sizes                 |
+| `load_sample_artifact`       | Loads a sample into the page, with any review already run against it     |
 | `explore_dissent`            | Extracts only the minority positions — what the board did _not_ agree on |
 
 `explore_dissent` exists because preserved dissent is the product. Most review
@@ -61,33 +61,40 @@ than buried in a field.
 **Twelve sample artifacts** ship in this repository under `public/samples/` —
 **four at each board size** — spanning architecture decisions, security
 architecture, data policy, API design, payments, accessibility, and incident
-review. Each ships with a **completed review package produced by the real
-platform**. Nothing is staged, hand-written, or mocked: these are genuine board
-outputs, committed so you can read full consensus-and-dissent results instantly,
-with no wait and no account.
+review. They are the documents the board reads: real technical writing with
+genuine unresolved trade-offs in them, not prompts dressed up as documents.
 
-Four at each size is deliberate. Comparing a 3-reviewer board against a
-7-reviewer board on comparable work is the fastest way to see what the extra
-seats actually buy — and whether they were worth it.
+**They ship as artifacts, not as pre-computed results.** Reviews are run live,
+on demand, against the production pipeline — press **Run this review** on any
+sample, or ask an agent to submit it. Nothing in this repository is a canned
+review output, because a canned review output is indistinguishable from a
+convincing fake and would be worth nothing to you.
 
-**Twenty-one demo tokens** are reserved for judging — seven at each board size.
-They run live reviews against the real pipeline at no cost to you. Everyone else
-is charged normal rates.
+Four at each size is deliberate. Running the same board size across comparable
+documents, or different sizes against one document, is the fastest way to see
+what the extra seats actually buy — and whether they were worth it.
 
-| Board size  | Demo tokens | Price to everyone else | Typical time to complete |
-| ----------- | ----------- | ---------------------- | ------------------------ |
-| 3 reviewers | 7           | $15                    | **1–3 minutes**          |
-| 5 reviewers | 7           | $29                    | **2–4 minutes**          |
-| 7 reviewers | 7           | $69                    | **3+ minutes**           |
+**Live reviews are free for judging.** Open the pre-authenticated link in the
+submission notes and credits are already loaded; no sign-up, no card. Demo
+tokens are available as an alternative if you would rather use your own
+account. Everyone else is charged the normal rate.
+
+| Board size  | Price to everyone else | Typical time to complete |
+| ----------- | ---------------------- | ------------------------ |
+| 3 reviewers | $15                    | **1–3 minutes**          |
+| 5 reviewers | $29                    | **2–4 minutes**          |
+| 7 reviewers | $69                    | **3+ minutes**           |
 
 **More reviewers takes longer.** Each reviewer is an independent model family
 producing its own findings before synthesis, so a seven-seat board is not a
 seven-times-larger prompt — it is seven separate reviews plus a synthesis pass.
-If you want to see the full board without waiting, read a committed sample first;
-the live run is there to prove the samples are real.
+Start with a 3-reviewer sample if you want a result in about ninety seconds.
 
-Demo tokens are entered in the page's token field, or an agent can be told to use
-one. They expire after the judging period.
+Board size comes from the credit being spent, not from the sample's label. A
+sample catalogued as "3 reviewers" run on a 7-reviewer entitlement convenes
+seven — the label is what it is filed under, the entitlement is what you get.
+
+Access expires at the end of September 2026.
 
 ---
 
@@ -103,8 +110,8 @@ npm run dev
 ```
 
 This serves the page at `http://localhost:8787` against the production API. The
-sample artifacts and their review packages are static and work offline; live
-review submission needs a demo token or an account.
+sample artifacts are static and readable offline; running a review needs an
+account with credits, or the pre-authenticated judge link.
 
 To point at a different API host, set `window.SUGGESTIBILITY_API_BASE` before
 `webmcp-tools.js` loads.
@@ -115,8 +122,12 @@ WebMCP is not yet in stable browsers. Use either:
 
 - **ChatGPT's in-app browser** — open the live URL and ask the agent what tools
   the page offers.
-- **Chrome with WebMCP enabled** — see the
+- **Chrome 149+ with WebMCP enabled** — set `chrome://flags/#enable-webmcp-testing`
+  to Enabled and relaunch. See the
   [Chrome documentation](https://developer.chrome.com/docs/ai/webmcp).
+
+The status pill in the header reports which of these you are in, and how many
+tools registered.
 
 Without WebMCP the page degrades to a normal human UI. The agent surface is
 additive and never load-bearing.
