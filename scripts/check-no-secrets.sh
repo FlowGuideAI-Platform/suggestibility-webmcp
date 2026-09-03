@@ -6,11 +6,15 @@
 # participants. A demo token committed here is not a disclosure risk, it is a
 # billing one: every redemption spends real frontier-model calls.
 #
-# This check has already caught one real leak. The token input carried
-# placeholder="SUGGJUDGE…", which published the naming scheme and made the
-# live codes (SUGGJUDGE3/5/7) guessable on sight. It looked like UI copy.
-# That is exactly why this runs mechanically rather than living in a reviewer's
-# head: the dangerous version of this mistake never looks like a secret.
+# This check has already caught real leaks. The first: a token input whose
+# placeholder spelled out the code prefix, publishing the naming scheme and
+# making the live codes guessable on sight. It looked like UI copy.
+#
+# The second was in THIS FILE. It excludes itself from the scan below so it
+# does not match its own pattern -- and that blind spot is where a comment
+# naming the live codes verbatim sat undetected, in the one file whose job is
+# preventing that. Do not write a real code here, not even as an example.
+# Nothing enforces this line but this line.
 # ============================================================================
 set -euo pipefail
 
@@ -67,6 +71,14 @@ fi
 # guard nobody has watched fail is only a guess that it works.
 if ! node scripts/check-names.mjs; then
   fail "a person name appears in sample metadata (see above) — use a role title"
+fi
+
+# Close the self-exclusion blind spot: scan THIS file's comments too, skipping
+# only the lines that carry the detection patterns themselves. A guard that
+# cannot see one file is a guard with a hiding place, and something was already
+# hiding in it once.
+if grep -nE "SUGG(JUDGE|DEMO|COMP|CAP|OP)[0-9]" "$0" | grep -v "grep -rInE" | grep -v "^\s*[0-9]*:#.*naming scheme"; then
+  fail "the leak guard itself names a live code above"
 fi
 
 echo "✅ leak-guard: no demo codes, credentials, addresses, or person names found"
