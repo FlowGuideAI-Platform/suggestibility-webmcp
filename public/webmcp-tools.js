@@ -67,12 +67,14 @@ export async function api(path, options = {}) {
     // agent has no way out from inside the conversation. Say what would fix
     // it instead, in terms the agent can relay to the person reading.
     if (res.status === 401) {
-      throw new Error(
+      const err = new Error(
         "Not signed in. This page must be opened with the pre-authenticated link " +
           "from the submission notes (app.suggestibility.ai/?session=...), which " +
           "carries review credits. Sample artifacts and board-size recommendations " +
           "work without it; submitting a review does not.",
       );
+      err.status = 401;
+      throw err;
     }
     if (res.status === 402) {
       throw new Error(

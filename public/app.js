@@ -438,9 +438,35 @@ if (urlSession) {
   judgeSession = urlSession;
   setSessionToken(urlSession);
   const badge = $("redeem-msg");
-  if (badge)
-    badge.textContent =
-      "Signed in with the judge session — you can run a live review below.";
+  if (badge) badge.textContent = "Checking access\u2026";
+
+  /**
+   * Validate the session, and send a dead one to pricing.
+   *
+   * These links are time-boxed by design, and one of them appears on screen in
+   * a published demo video — which makes it a credential anyone can read off a
+   * paused frame. Revoking it has to be a single database row, with the page
+   * already knowing what to do about it.
+   *
+   * So the behaviour ships before the revocation does: while the session is
+   * live this probe simply succeeds and nothing happens. Delete the row and
+   * the same URL starts landing on pricing instead, with no redeploy and no
+   * window where it shows a broken page to someone who followed a link in
+   * good faith.
+   */
+  api("/api/reviews")
+    .then(() => {
+      if (badge)
+        badge.textContent =
+          "Signed in — you can run a live review on any sample above.";
+    })
+    .catch((e) => {
+      if (e?.status === 401) {
+        location.replace("https://suggestibility.ai/pricing");
+        return;
+      }
+      if (badge) badge.textContent = "";
+    });
 }
 
 if (urlToken || urlSession) history.replaceState({}, "", location.pathname);
